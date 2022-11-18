@@ -1,5 +1,7 @@
 package com.casavo.kotlinEventDriven
 
+import com.casavo.kotlinEventDriven.EventHandler.EventResult
+
 data class AppointmentCreatedPayload(private val test: String) : EventPayload()
 data class AppointmentCreated(
     override val type: String,
@@ -27,13 +29,13 @@ data class OffersBundleRefusalExpressed(
 ) : Event<OffersBundleRefusalExpressedPayload>(type, offset, payload), IOfferCursorEvent
 
 class AppointmentCreatedHandler : EventHandler<AppointmentCreated> {
-    override operator fun invoke(event: AppointmentCreated): Result<*> = Result.success(Unit)
+    override operator fun invoke(event: AppointmentCreated): EventResult = EventResult.Success
 }
 
 class AppointmentDeletedHandler : EventHandler<AppointmentDeleted> {
-    override operator fun invoke(event: AppointmentDeleted): Result<*> = Result.success(Unit)
+    override operator fun invoke(event: AppointmentDeleted): EventResult = EventResult.Success
 }
 
 class OffersBundleRefusalExpressedHandler : EventHandler<OffersBundleRefusalExpressed> {
-    override fun invoke(event: OffersBundleRefusalExpressed): Result<*> = Result.success(Unit)
+    override fun invoke(event: OffersBundleRefusalExpressed): EventResult = EventResult.Success
 }

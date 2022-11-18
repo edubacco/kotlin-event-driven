@@ -11,7 +11,7 @@ class DataGatheringCursorDispatcher(
     private val appointmentCreatedHandler: AppointmentCreatedHandler,
     private val appointmentDeletedHandler: AppointmentDeletedHandler,
 ) : ICursorDispatcher<IDataGatheringCursorEvent> {
-    override fun dispatch(event: IDataGatheringCursorEvent): Result<*> = when (event) {
+    override fun dispatch(event: IDataGatheringCursorEvent): EventHandler.EventResult = when (event) {
         is AppointmentCreated -> appointmentCreatedHandler(event)
         is AppointmentDeleted -> appointmentDeletedHandler(event)
     }

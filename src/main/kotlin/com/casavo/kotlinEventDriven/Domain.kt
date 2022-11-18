@@ -12,7 +12,13 @@ sealed class Event<EP : EventPayload>(
 }
 
 interface EventHandler<E : Event<*>> {
-    operator fun invoke(event: E): Result<*> // todo: return success|skip|failure (sealed, non enum, così ci posso mettere info)
+    operator fun invoke(event: E): EventResult
+
+    sealed class EventResult {
+        object Success : EventResult()
+        class Skip(val reason: String = "") : EventResult()
+        class Failed(val reason: String) : EventResult()
+    }
 }
 
 interface Cursor {
@@ -25,7 +31,7 @@ sealed interface ICursorEvent
 
 // dispatch events to handlers for a single cursor (here the compiler helps me if I do things wrong)
 interface ICursorDispatcher<E: ICursorEvent> {
-    fun dispatch(event: E): Result<*>
+    fun dispatch(event: E): EventHandler.EventResult
 }
 
 interface EventStoreService {

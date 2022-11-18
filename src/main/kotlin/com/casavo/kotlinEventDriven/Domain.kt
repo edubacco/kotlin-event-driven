@@ -1,22 +1,18 @@
 package com.casavo.kotlinEventDriven
 
-class Event<T : EventType>(
-    val type: T,
-    val offset: Offset,
-    val payload: EventPayload<T>
+open class EventPayload
+
+sealed class Event<EP : EventPayload>(
+    open val type: String,
+    open val offset: Offset,
+    open val payload: EP
 ) {
     @JvmInline
     value class Offset(val int: Int)
 }
 
-sealed class EventType(
-    open val name: String
-)
-
-class EventPayload<T : EventType>
-
-interface EventHandler<T : EventType> {
-    fun invoke(event: Event<T>): Result<*>
+interface EventHandler<E : Event<*>> {
+    operator fun invoke(event: E): Result<*> // todo: return success|skip|failure (sealed, non enum, così ci posso mettere info)
 }
 
 interface Cursor {
@@ -25,13 +21,11 @@ interface Cursor {
 }
 
 // defines events related to a single cursor
-sealed interface ICursorEvent {
-    val event: Event<*>
-}
+sealed interface ICursorEvent
 
 // dispatch events to handlers for a single cursor (here the compiler helps me if I do things wrong)
-interface ICursorDispatcher<T: ICursorEvent> {
-    fun dispatch(event: T): Result<*>
+interface ICursorDispatcher<E: ICursorEvent> {
+    fun dispatch(event: E): Result<*>
 }
 
 interface EventStoreService {

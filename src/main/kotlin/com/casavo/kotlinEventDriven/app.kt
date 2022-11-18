@@ -19,6 +19,6 @@ class DataGatheringCursorRunner(
 
 @Suppress("UNCHECKED_CAST")
 private fun Event<*>.toDataGatheringEvent(): DataGatheringCursorEvent = when (this.type) {
-    AppointmentCreatedType -> DataGatheringCursorEvent.DataGatheringCursorAppointmentCreated(this as Event<AppointmentCreatedType>)
-    AppointmentDeletedType -> DataGatheringCursorEvent.DataGatheringCursorAppointmentDeleted(this as Event<AppointmentDeletedType>)
+    is AppointmentCreated -> DataGatheringCursorEvent.DataGatheringCursorAppointmentCreated(this as AppointmentCreated)
+    is AppointmentDeleted -> DataGatheringCursorEvent.DataGatheringCursorAppointmentDeleted(this as AppointmentDeleted)
 }

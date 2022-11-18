@@ -7,18 +7,23 @@ class DataGatheringCursorRunner(
 ) {
     fun run(): Unit {
         eventStore.getNewEvents(cursor, 1)
-            .forEach { event ->
-                cursorDispatcher.dispatch(event.toDataGatheringEvent())
-                    .onFailure { }
-                    .onSuccess { }
-
-                eventStore.acknowledgeEvent(event, cursor)
-            }
+            .forEach(::handle)
     }
-}
 
-@Suppress("UNCHECKED_CAST")
-private fun Event<*>.toDataGatheringEvent(): DataGatheringCursorEvent = when (this.type) {
-    is AppointmentCreated -> DataGatheringCursorEvent.DataGatheringCursorAppointmentCreated(this as AppointmentCreated)
-    is AppointmentDeleted -> DataGatheringCursorEvent.DataGatheringCursorAppointmentDeleted(this as AppointmentDeleted)
+    private fun handle(event: Event<*>): Unit {
+        when (event) {
+            is IDataGatheringCursorEvent -> when (cursorDispatcher.dispatch(event)) {
+                //todo: and dlq?
+                is EventHandler.EventResult.Failed -> toDlq(event) //todo: log warning
+                is EventHandler.EventResult.Skip -> Unit //todo: log warning
+                EventHandler.EventResult.Success -> Unit
+            }
+
+            else -> {} // todo: log warning
+        }
+
+        eventStore.acknowledgeEvent(event, cursor)
+    }
+
+    private fun toDlq(event: IDataGatheringCursorEvent): Unit = Unit //todo: implement DLQ
 }

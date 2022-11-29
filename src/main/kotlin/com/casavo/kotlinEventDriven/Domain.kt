@@ -26,10 +26,14 @@ interface Cursor {
     value class Name(val name: String)
 }
 
-// defines events related to a single cursor
+/**
+ * Identifies events related to a cursor
+ */
 sealed interface ICursorEvent
 
-// dispatch events to handlers for a single cursor (here the compiler helps me if I do things wrong)
+/**
+ * Dispatch events to handlers for a cursor (here the compiler helps me if I do things wrong)
+ */
 interface ICursorDispatcher<E: ICursorEvent> {
     fun dispatch(event: E): EventHandler.EventResult
 }

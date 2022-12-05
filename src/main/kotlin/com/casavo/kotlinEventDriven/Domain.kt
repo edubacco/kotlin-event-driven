@@ -4,10 +4,9 @@ import kotlin.reflect.KClass
 
 open class EventPayload
 
-sealed class Event(
-) {
-    abstract val type: String
+sealed class Event {
     abstract val offset: Offset
+    abstract val type: String
 
     @JvmInline
     value class Offset(val int: Int)

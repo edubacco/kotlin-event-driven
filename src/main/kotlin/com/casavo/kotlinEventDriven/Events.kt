@@ -7,8 +7,7 @@ data class AppointmentCreated(
     override val type: String,
     override val offset: Offset,
     val payload: AppointmentCreatedPayload
-) :
-    Event(), IDataGatheringCursorEvent
+) : Event(), IDataGatheringCursorEvent
 
 data class AppointmentDeletedPayload(private val test: String) : EventPayload()
 
@@ -18,7 +17,7 @@ data class AppointmentDeleted(
     val payload: AppointmentDeletedPayload
 ) : Event(), IDataGatheringCursorEvent
 
-data class OffersBundleRefusalExpressedPayload(private val test: String): EventPayload()
+data class OffersBundleRefusalExpressedPayload(private val test: String) : EventPayload()
 data class OffersBundleRefusalExpressed(
     override val type: String,
     override val offset: Event.Offset,

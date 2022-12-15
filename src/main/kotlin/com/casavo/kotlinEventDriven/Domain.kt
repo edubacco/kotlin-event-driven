@@ -17,8 +17,8 @@ interface EventHandler<E : Event> {
 
     sealed class EventResult {
         object Success : EventResult()
-        class Skip(val reason: String = "") : EventResult()
-        class Failed(val reason: String) : EventResult()
+        class Skip(val reason: String) : EventResult()
+        class Failed(val reason: Exception) : EventResult()
     }
 }
 
